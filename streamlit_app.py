@@ -26,7 +26,22 @@ NOTE_FILES = {
 def play_note(note):
     file = NOTE_FILES.get(note)
     if file and Path(file).exists():
-        st.audio(file, format='audio/wav')
+        audio_file = open(file, 'rb')
+        audio_bytes = audio_file.read()
+        base64_audio = base64.b64encode(audio_bytes).decode()
+
+        audio_html = f"""
+        <audio id="audio" autoplay>
+        <source src="data:audio/wav;base64,{base64_audio}" type="audio/wav">
+        Your browser does not support the audio element.
+        </audio>
+        <script>
+        document.getElementById('audio').play();
+        </script>
+        """
+        components.html(audio_html, height=0, width=0)
+    else:
+        pass
 
 # Styling keys to resemble piano keys
 white_key_style = """
@@ -41,10 +56,7 @@ white_key_style = """
         justify-content: center;
         align-items: center;
         margin: 0 2px;
-        cursor: pointer;
-    }
-    .white-key:active {
-        transform: translateY(5px);
+        position: relative;
     }
     </style>
     """
@@ -63,10 +75,7 @@ black_key_style = """
         margin: 0 -20px;
         z-index: 2;
         position: relative;
-        cursor: pointer;
-    }
-    .black-key:active {
-        transform: translateY(5px);
+        top: 0;
     }
     </style>
     """
@@ -88,6 +97,6 @@ columns = st.columns(len(keys_layout))
 
 for i, (note, style) in enumerate(keys_layout):
     with columns[i]:
-        if st.button(note, key=note, help=f"Play {note}"):
+        if st.button("", key=note, help=f"Play {note}"):
             play_note(note)
-        st.markdown(f'<div class="{style}"></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="{style}">{note}</div>', unsafe_allow_html=True)
