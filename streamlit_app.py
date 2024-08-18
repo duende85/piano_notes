@@ -3,40 +3,12 @@ import soundfile as sf
 from pathlib import Path
 import base64
 import streamlit.components.v1 as components
+import time
 
 st.set_page_config(layout="wide")
 
 # Define the notes and their corresponding files
 NOTE_FILES = {
-    # Octave 4 (placeholders, uncomment and add files when ready)
-    # 'C4': 'notes/c4.wav',
-    # 'C#4': 'notes/c_sharp_4.wav',
-    # 'D4': 'notes/d4.wav',
-    # 'D#4': 'notes/d_sharp_4.wav',
-    # 'E4': 'notes/e4.wav',
-    # 'F4': 'notes/f4.wav',
-    # 'F#4': 'notes/f_sharp_4.wav',
-    # 'G4': 'notes/g4.wav',
-    # 'G#4': 'notes/g_sharp_4.wav',
-    # 'A4': 'notes/a4.wav',
-    # 'A#4': 'notes/a_sharp_4.wav',
-    # 'B4': 'notes/b4.wav',
-
-    # Octave 5 (placeholders, uncomment and add files when ready)
-    # 'C5': 'notes/c5.wav',
-    # 'C#5': 'notes/c_sharp_5.wav',
-    # 'D5': 'notes/d5.wav',
-    # 'D#5': 'notes/d_sharp_5.wav',
-    # 'E5': 'notes/e5.wav',
-    # 'F5': 'notes/f5.wav',
-    # 'F#5': 'notes/f_sharp_5.wav',
-    # 'G5': 'notes/g5.wav',
-    # 'G#5': 'notes/g_sharp_5.wav',
-    # 'A5': 'notes/a5.wav',
-    # 'A#5': 'notes/a_sharp_5.wav',
-    # 'B5': 'notes/b5.wav',
-
-    # Octave 6 (active keys with sound files)
     'C6': 'notes/c6.wav',
     'C#6': 'notes/c_sharp_6.wav',
     'D6': 'notes/d6.wav',
@@ -51,7 +23,8 @@ NOTE_FILES = {
     'B6': 'notes/b6.wav',
 }
 
-def play_note(note):
+# Function to play the note and temporarily change the key's appearance
+def play_note_and_animate(note):
     file = NOTE_FILES.get(note)
     if file and Path(file).exists():
         audio_file = open(file, 'rb')
@@ -64,7 +37,10 @@ def play_note(note):
         Your browser does not support the audio element.
         </audio>
         <script>
-        document.getElementById('audio').play();
+        document.getElementById('{note}').classList.add('pressed');
+        setTimeout(function() {{
+            document.getElementById('{note}').classList.remove('pressed');
+        }}, 2000);
         </script>
         """
         components.html(audio_html, height=0, width=0)
@@ -85,6 +61,10 @@ white_key_style = """
         margin-right: -2px;
         z-index: 1;
     }
+    .white-key.pressed {
+        background-color: lightgray;
+        transform: translateY(5px);
+    }
     </style>
     """
 
@@ -101,6 +81,10 @@ black_key_style = """
         margin-left: -20px;
         z-index: 2;
         top: 0;
+    }
+    .black-key.pressed {
+        background-color: darkgray;
+        transform: translateY(5px);
     }
     </style>
     """
@@ -131,8 +115,7 @@ def generate_keys_layout(octave_range, active_octave=None):
             key_name = f'{note}{octave}'
             style = 'black-key' if '#' in note else 'white-key'
             is_active = octave == active_octave and key_name in NOTE_FILES
-            label = 'C4' if key_name == 'C4' else ''
-            keys_layout.append((key_name, style, is_active, label))
+            keys_layout.append((key_name, style, is_active))
     return keys_layout
 
 # Define the layout for the keys (Octaves 4, 5, 6)
@@ -142,17 +125,13 @@ keys_layout = generate_keys_layout(octave_range=range(4, 7), active_octave=6)
 st.title("Piano App")
 columns = st.columns(len(keys_layout))
 
-for i, (note, style, is_active, label) in enumerate(keys_layout):
+for i, (note, style, is_active) in enumerate(keys_layout):
     with columns[i]:
-        # Add small play buttons above the keys
         if is_active:
-            if st.button("▶", key=note):
-                play_note(note)
+            if st.button("▶", key=note, help=f"Play {note}"):
+                play_note_and_animate(note)
         else:
             st.button("▶", key=note, disabled=True)
         
-        # Display the key with or without label
-        if label:
-            st.markdown(f'<div class="{style}">{label}</div>', unsafe_allow_html=True)
-        else:
-            st.markdown(f'<div class="{style}"></div>', unsafe_allow_html=True)
+        # Display the key with the note ID
+        st.markdown(f'<div id="{note}" class="{style}"></div>', unsafe_allow_html=True)
