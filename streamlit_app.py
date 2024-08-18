@@ -219,5 +219,5 @@ if st.button("Refresh Note Score"):
     st.session_state.feedback_message = ""
     # No need for experimental rerun, we manually refresh state and UI elements
 
-st.markdown("## Write anything you want below the piano here.")
-st.write("This is where you can add any text, charts, or other content you want to display below the piano visualization.")
+#st.markdown("## Write anything you want below the piano here.")
+#st.write("This is where you can add any text, charts, or other content you want to display below the piano visualization.")
