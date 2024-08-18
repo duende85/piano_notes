@@ -2,6 +2,7 @@ import streamlit as st
 import soundfile as sf
 from pathlib import Path
 import base64
+import random
 import streamlit.components.v1 as components
 
 st.set_page_config(layout="wide")
@@ -114,10 +115,21 @@ button_style = """
     </style>
     """
 
+# Function to randomly select and display a chord image
+def display_random_chord_image():
+    chord_images_dir = Path("key_scores")
+    chord_images = list(chord_images_dir.glob("*.png"))
+    if chord_images:
+        random_chord_image = random.choice(chord_images)
+        st.image(str(random_chord_image), use_column_width=True)
+
 # Display styles
 st.markdown(white_key_style, unsafe_allow_html=True)
 st.markdown(black_key_style, unsafe_allow_html=True)
 st.markdown(button_style, unsafe_allow_html=True)
+
+# Display a random chord image above the piano keys
+display_random_chord_image()
 
 # Function to generate keys layout
 def generate_keys_layout(octave_range, active_octave=None):
