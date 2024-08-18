@@ -71,57 +71,43 @@ def play_note(note):
     else:
         pass
 
-# Styling keys to resemble piano keys
-white_key_style = """
+# CSS for a more realistic piano look
+piano_style = """
     <style>
+    .piano-frame {
+        background-color: #654321;
+        padding: 20px;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
     .white-key {
         background-color: white;
-        color: black;
         border: 1px solid black;
-        width: 58px;
-        height: 200px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 0 1px;
+        width: 60px;
+        height: 240px;
+        display: inline-block;
+        margin: 0 -3px;
         position: relative;
+        z-index: 1;
     }
-    </style>
-    """
-
-black_key_style = """
-    <style>
     .black-key {
         background-color: black;
-        color: white;
         border: 1px solid black;
-        width: 38px;
-        height: 120px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 0 -19px;
-        z-index: 2;
-        position: relative;
+        width: 40px;
+        height: 140px;
+        display: inline-block;
+        margin: 0 -20px;
+        position: absolute;
         top: 0;
-    }
-    </style>
-    """
-
-# Adjust the button size with global CSS
-button_style = """
-    <style>
-    .stButton button {
-        font-size: 10px;
-        padding: 3px 6px;
+        z-index: 2;
     }
     </style>
     """
 
 # Display styles
-st.markdown(white_key_style, unsafe_allow_html=True)
-st.markdown(black_key_style, unsafe_allow_html=True)
-st.markdown(button_style, unsafe_allow_html=True)
+st.markdown(piano_style, unsafe_allow_html=True)
 
 # Function to generate keys layout
 def generate_keys_layout(octave_range, active_octave=None):
@@ -137,18 +123,14 @@ def generate_keys_layout(octave_range, active_octave=None):
 # Define the layout for the keys (Octaves 4, 5, 6)
 keys_layout = generate_keys_layout(octave_range=range(4, 7), active_octave=6)
 
-# Render the keys horizontally
+# Render the keys horizontally within a piano frame
 st.title("Piano App")
-columns = st.columns(len(keys_layout))
-
+st.markdown('<div class="piano-frame">', unsafe_allow_html=True)
 for i, (note, style, is_active) in enumerate(keys_layout):
-    with columns[i]:
-        # Add small play buttons above the keys
-        if is_active:
-            if st.button("▶", key=note):
-                play_note(note)
-        else:
-            st.button("▶", key=note, disabled=True)
-        
-        # Display the key without note names
-        st.markdown(f'<div class="{style}"></div>', unsafe_allow_html=True)
+    if is_active:
+        if st.button("▶", key=note, help=f"Play {note}", use_container_width=True):
+            play_note(note)
+    else:
+        st.button("▶", key=note, disabled=True, use_container_width=True)
+    st.markdown(f'<div class="{style}"></div>', unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)
