@@ -22,6 +22,21 @@ NOTE_FILES = {
     'B6': 'notes/b6.wav',
 }
 
+KEY_SCORES = {
+    'C6': 'key_scores/c6.png',
+    'C#6': 'key_scores/c_sharp_6.png',
+    'D6': 'key_scores/d6.png',
+    'D#6': 'key_scores/d_sharp_6.png',
+    'E6': 'key_scores/e6.png',
+    'F6': 'key_scores/f6.png',
+    # 'F#6': 'key_scores/f_sharp_6.png',
+    'G6': 'key_scores/g6.png',
+    'G#6': 'key_scores/g_sharp_6.png',
+    'A6': 'key_scores/a6.png',
+    'A#6': 'key_scores/a_sharp_6.png',
+    'B6': 'key_scores/b6.png',
+}
+
 # Function to play the note and temporarily change the key's appearance
 def play_note_and_animate(note):
     file = NOTE_FILES.get(note)
@@ -155,3 +170,4 @@ for i, (note, style, is_active, label) in enumerate(keys_layout):
 
 st.markdown("## Write anything you want below the piano here.")
 st.write("This is where you can add any text, charts, or other content you want to display below the piano visualization.")
+st.image(KEY_SCORES['F6'], caption="F6 Chord", use_column_width=False)
