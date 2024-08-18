@@ -56,14 +56,13 @@ NOTE_FILES = {
     'B6': 'notes/b6.wav'
 }
 
-# Function to play a note
 def play_note(note):
     file = NOTE_FILES.get(note)
     if file and Path(file).exists():
-        st.audio(file, format='audio/wav')
-        st.write(f"Playing: {note}")
+        st.audio(file, format='audio/mp3')
+        st.write(f"Playing: {note} - File path: {file}")
     else:
-        st.write(f"File not found for note: {note}")
+        st.write(f"File not found for note: {note} - File path: {file}")
 
 # Create the piano keys
 keys = []
