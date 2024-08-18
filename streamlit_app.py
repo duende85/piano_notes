@@ -8,6 +8,20 @@ import time
 
 st.set_page_config(layout="wide")
 
+# Add custom CSS to reduce the white space
+st.markdown("""
+    <style>
+    /* Reduce the space above the content */
+    .block-container {
+        padding-top: 0rem;
+        padding-bottom: 0rem;
+    }
+    .stApp {
+        margin-top: -50px;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
 # Define the notes and their corresponding files
 NOTE_FILES = {
     'C6': 'notes/c6.wav',
