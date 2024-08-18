@@ -78,9 +78,7 @@ def play_note(note):
         </script>
         """
         components.html(audio_html, height=0, width=0)
-        st.write(f"Playing: {note}")
     else:
-        st.write(f"File not found for note: {note}")
 
 def play_note2(note):
     file = NOTE_FILES.get(note)
