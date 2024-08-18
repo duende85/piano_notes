@@ -2,6 +2,7 @@ import streamlit as st
 import soundfile as sf
 from pathlib import Path
 import base64
+import random
 import streamlit.components.v1 as components
 
 st.set_page_config(layout="wide")
@@ -149,9 +150,12 @@ def generate_keys_layout(octave_range, active_octave=None):
 # Define the layout for the keys (Octaves 4, 5, 6)
 keys_layout = generate_keys_layout(octave_range=range(4, 7), active_octave=6)
 
+# Select a random image from the KEY_SCORES dictionary
+random_image = random.choice(list(KEY_SCORES.values()))
+
 # Render the keys horizontally
 st.title("Score Sync App / Igor Wilk / August 2024")
-st.image(KEY_SCORES['F6'], use_column_width=False)
+st.image(random_image, use_column_width=False)
 columns = st.columns(len(keys_layout))
 
 for i, (note, style, is_active, label) in enumerate(keys_layout):
