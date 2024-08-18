@@ -38,7 +38,7 @@ KEY_SCORES = {
     'D#6': 'key_scores/d_sharp_6.png',
     'E6': 'key_scores/e6.png',
     'F6': 'key_scores/f6.png',
-    'F#6': 'key_scores/f_sharp_6.png',  # Fixed filename
+    'F#6': 'key_scores/f_sharp_6.png',
     'G6': 'key_scores/g6.png',
     'G#6': 'key_scores/g_sharp_6.png',
     'A6': 'key_scores/a6.png',
@@ -47,14 +47,12 @@ KEY_SCORES = {
 }
 
 # Initialize session state if not already set
-if 'current_key' not in st.session_state:
+if 'current_key' not in st.session_state or 'reset' in st.session_state:
     st.session_state.current_key = random.choice(list(KEY_SCORES.keys()))
-
-if 'feedback_message' not in st.session_state:
     st.session_state.feedback_message = ""
-
-if 'audio_data' not in st.session_state:
     st.session_state.audio_data = {}
+    if 'reset' in st.session_state:
+        del st.session_state['reset']
 
 # Function to play the note (only when pressed correctly)
 def play_note_if_correct(note):
@@ -203,7 +201,8 @@ for i, (note, style, label) in enumerate(keys_layout):
 if st.session_state.feedback_message:
     st.markdown(f"<h3 style='color:{st.session_state.feedback_color};'>{st.session_state.feedback_message}</h3>", unsafe_allow_html=True)
 
-# Manual refresh button for the note score with full app refresh
+# Manual refresh button for the note score with effective reset
 if st.button("Refresh Note Score"):
-    # Resetting the entire app by using st.experimental_rerun to reload the script
+    # Trigger a reset of the session state
+    st.session_state['reset'] = True
     st.experimental_rerun()
