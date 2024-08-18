@@ -2,6 +2,8 @@ import streamlit as st
 import soundfile as sf
 from pathlib import Path
 
+st.set_page_config(layout="wide")
+
 # Define the notes and their corresponding files
 NOTE_FILES = { 
     'C3': 'notes/c3.wav',
