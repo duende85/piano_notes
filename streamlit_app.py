@@ -99,7 +99,7 @@ for i, note in enumerate(notes):
 
 # Display feedback message
 if st.session_state.feedback_message:
-    st.markdown(f"<h3 style='color:{st.session_state.feedback_color};">{st.session_state.feedback_message}</h3>", unsafe_allow_html=True)
+    st.markdown(f"<h3 style='color:{st.session_state.feedback_color};'>{st.session_state.feedback_message}</h3>", unsafe_allow_html=True)
 
 # Manual refresh button for the note score
 if st.button("Refresh Note Score"):
