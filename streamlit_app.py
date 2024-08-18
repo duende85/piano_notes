@@ -57,24 +57,30 @@ NOTE_FILES = {
 }
 
 import streamlit.components.v1 as components
+import base64
 
 def play_note(note):
     file = NOTE_FILES.get(note)
     if file and Path(file).exists():
+        # Read the audio file and encode it to base64
         audio_file = open(file, 'rb')
         audio_bytes = audio_file.read()
-        st.write(f"Playing: {note}")
-        
-        # Use HTML to automatically play the audio
+        base64_audio = base64.b64encode(audio_bytes).decode()
+
+        # Embed the base64-encoded audio file in an HTML audio element with autoplay
         audio_html = f"""
-        <audio autoplay>
-        <source src="data:audio/wav;base64,{audio_bytes.decode('latin1')}" type="audio/wav">
+        <audio id="audio" autoplay>
+        <source src="data:audio/wav;base64,{base64_audio}" type="audio/wav">
         Your browser does not support the audio element.
         </audio>
+        <script>
+        document.getElementById('audio').play();
+        </script>
         """
         components.html(audio_html, height=0, width=0)
+        st.write(f"Playing: {note}")
     else:
-        st.write(f"File not found for note: {note} - File path: {file}")
+        st.write(f"File not found for note: {note}")
 
 def play_note2(note):
     file = NOTE_FILES.get(note)
