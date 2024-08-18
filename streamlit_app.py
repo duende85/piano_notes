@@ -145,7 +145,7 @@ for i, (note, style, is_active) in enumerate(keys_layout):
     with columns[i]:
         # Add small play buttons above the keys
         if is_active:
-            if st.button("▶", key=note"):
+            if st.button("▶", key=note):
                 play_note(note)
         else:
             st.button("▶", key=note, disabled=True)
