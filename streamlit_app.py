@@ -72,21 +72,18 @@ def play_note(note):
         pass
 
 # Styling keys to resemble piano keys
-# Styling keys to resemble piano keys
 white_key_style = """
     <style>
     .white-key {
         background-color: white;
         color: black;
         border: 1px solid black;
-        width: 58px;
+        width: 60px;
         height: 200px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 0;
-        padding: 0;
+        display: inline-block;
         position: relative;
+        margin-right: -2px;
+        z-index: 1;
     }
     </style>
     """
@@ -97,15 +94,12 @@ black_key_style = """
         background-color: black;
         color: white;
         border: 1px solid black;
-        width: 38px;
+        width: 40px;
         height: 120px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 0 -19px;
-        padding: 0;
+        display: inline-block;
+        position: absolute;
+        margin-left: -20px;
         z-index: 2;
-        position: relative;
         top: 0;
     }
     </style>
