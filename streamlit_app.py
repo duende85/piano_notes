@@ -125,7 +125,7 @@ black_key_style = """
         background-color: black;
         color: white;
         border: 1px solid black;
-        width: 40px;
+        width: 30px;
         height: 120px;  /* 60% of the height of white keys */
         display: inline-block;
         position: absolute;
