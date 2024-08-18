@@ -52,15 +52,16 @@ KEY_SCORES = {
     'B6': 'key_scores/b6.png',
 }
 
+# Function to get a random image and its corresponding key
+def get_random_image():
+    return random.choice(list(KEY_SCORES.items()))
+
 # Initialize session state for random image and feedback message
 if 'random_image' not in st.session_state:
-    st.session_state.random_image = random.choice(list(KEY_SCORES.items()))
+    st.session_state.random_key, st.session_state.random_image = get_random_image()
 
 if 'feedback_message' not in st.session_state:
     st.session_state.feedback_message = ""
-
-if 'last_correct' not in st.session_state:
-    st.session_state.last_correct = False
 
 # Function to play the note and temporarily change the key's appearance
 def play_note_and_animate(note):
@@ -174,19 +175,18 @@ def generate_keys_layout(octave_range, active_octave=None):
 # Define the layout for the keys (Octaves 4, 5, 6)
 keys_layout = generate_keys_layout(octave_range=range(4, 7), active_octave=6)
 
-# Get the random image and its associated key
-random_key, random_image = st.session_state.random_image
+# Get the random image and its associated key from session state
+random_key = st.session_state.random_key
+random_image = st.session_state.random_image
 
 # Function to check if the pressed key matches the displayed key
 def check_key_press(note):
     if note == random_key:
         st.session_state.feedback_message = "Correct!"
         st.session_state.feedback_color = "green"
-        st.session_state.last_correct = True
     else:
         st.session_state.feedback_message = "Incorrect"
         st.session_state.feedback_color = "red"
-        st.session_state.last_correct = False
 
 # Render the keys horizontally
 st.title("Score Sync App / Igor Wilk / August 2024")
@@ -215,9 +215,9 @@ if st.session_state.feedback_message:
 
 # Manual refresh button for the note score
 if st.button("Refresh Note Score"):
-    st.session_state.random_image = random.choice(list(KEY_SCORES.items()))
+    st.session_state.random_key, st.session_state.random_image = get_random_image()
     st.session_state.feedback_message = ""
-    st.session_state.last_correct = False  # Reset the last correct state
+    st.experimental_rerun()
 
 st.markdown("## Write anything you want below the piano here.")
 st.write("This is where you can add any text, charts, or other content you want to display below the piano visualization.")
