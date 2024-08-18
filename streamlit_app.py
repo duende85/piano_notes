@@ -8,7 +8,35 @@ st.set_page_config(layout="wide")
 
 # Define the notes and their corresponding files
 NOTE_FILES = {
-    # Octave 6
+    # Octave 4 (placeholders, uncomment and add files when ready)
+    # 'C4': 'notes/c4.wav',
+    # 'C#4': 'notes/c_sharp_4.wav',
+    # 'D4': 'notes/d4.wav',
+    # 'D#4': 'notes/d_sharp_4.wav',
+    # 'E4': 'notes/e4.wav',
+    # 'F4': 'notes/f4.wav',
+    # 'F#4': 'notes/f_sharp_4.wav',
+    # 'G4': 'notes/g4.wav',
+    # 'G#4': 'notes/g_sharp_4.wav',
+    # 'A4': 'notes/a4.wav',
+    # 'A#4': 'notes/a_sharp_4.wav',
+    # 'B4': 'notes/b4.wav',
+
+    # Octave 5 (placeholders, uncomment and add files when ready)
+    # 'C5': 'notes/c5.wav',
+    # 'C#5': 'notes/c_sharp_5.wav',
+    # 'D5': 'notes/d5.wav',
+    # 'D#5': 'notes/d_sharp_5.wav',
+    # 'E5': 'notes/e5.wav',
+    # 'F5': 'notes/f5.wav',
+    # 'F#5': 'notes/f_sharp_5.wav',
+    # 'G5': 'notes/g5.wav',
+    # 'G#5': 'notes/g_sharp_5.wav',
+    # 'A5': 'notes/a5.wav',
+    # 'A#5': 'notes/a_sharp_5.wav',
+    # 'B5': 'notes/b5.wav',
+
+    # Octave 6 (active keys with sound files)
     'C6': 'notes/c6.wav',
     'C#6': 'notes/c_sharp_6.wav',
     'D6': 'notes/d6.wav',
@@ -84,19 +112,25 @@ black_key_style = """
 st.markdown(white_key_style, unsafe_allow_html=True)
 st.markdown(black_key_style, unsafe_allow_html=True)
 
-# Define the layout for the keys
-keys_layout = [
-    ('C6', 'white-key'), ('C#6', 'black-key'), ('D6', 'white-key'), ('D#6', 'black-key'), 
-    ('E6', 'white-key'), ('F6', 'white-key'), ('F#6', 'black-key'), ('G6', 'white-key'), 
-    ('G#6', 'black-key'), ('A6', 'white-key'), ('A#6', 'black-key'), ('B6', 'white-key')
-]
+# Function to generate keys layout
+def generate_keys_layout(octave_range, active_octave=None):
+    keys_layout = []
+    for octave in octave_range:
+        for note in ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']:
+            key_name = f'{note}{octave}'
+            style = 'black-key' if '#' in note else 'white-key'
+            keys_layout.append((key_name, style, octave == active_octave))
+    return keys_layout
+
+# Define the layout for the keys (Octaves 4, 5, 6)
+keys_layout = generate_keys_layout(octave_range=range(4, 7), active_octave=6)
 
 # Render the keys horizontally
 st.title("Piano App")
 columns = st.columns(len(keys_layout))
 
-for i, (note, style) in enumerate(keys_layout):
+for i, (note, style, is_active) in enumerate(keys_layout):
     with columns[i]:
-        if st.button("▶", key=note, help=f"Play {note}"):
+        if is_active and st.button("▶", key=note, help=f"Play {note}"):
             play_note(note)
         st.markdown(f'<div class="{style}">{note}</div>', unsafe_allow_html=True)
