@@ -48,6 +48,7 @@ def play_note_and_animate(note):
         pass
 
 # Styling keys to resemble piano keys
+# Styling keys to resemble piano keys
 white_key_style = """
     <style>
     .white-key {
@@ -65,7 +66,7 @@ white_key_style = """
     .white-key.pressed {
         background-color: lightgray;
         transform: translateY(5px);
-        border-top-color: lightgray;  /* Hide the top border when pressed */
+        border-top: none;  /* Completely remove the top border when pressed */
     }
     </style>
     """
@@ -81,7 +82,7 @@ black_key_style = """
         display: inline-block;
         position: absolute;
         margin-left: -20px;
-        z-index: 2;
+        z-index: 3;  /* Ensure black key stays on top */
         top: 0;
         transition: transform 0.1s ease;
     }
