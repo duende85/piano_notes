@@ -50,12 +50,12 @@ white_key_style = """
         background-color: white;
         color: black;
         border: 1px solid black;
-        width: 60px;
+        width: 58px;
         height: 200px;
         display: flex;
         justify-content: center;
         align-items: center;
-        margin: 0 2px;
+        margin: 0 1px;
         position: relative;
     }
     </style>
@@ -67,12 +67,12 @@ black_key_style = """
         background-color: black;
         color: white;
         border: 1px solid black;
-        width: 40px;
+        width: 38px;
         height: 120px;
         display: flex;
         justify-content: center;
         align-items: center;
-        margin: 0 -20px;
+        margin: 0 -19px;
         z-index: 2;
         position: relative;
         top: 0;
@@ -97,6 +97,6 @@ columns = st.columns(len(keys_layout))
 
 for i, (note, style) in enumerate(keys_layout):
     with columns[i]:
-        if st.button("", key=note, help=f"Play {note}"):
+        if st.button("▶", key=note, help=f"Play {note}"):
             play_note(note)
         st.markdown(f'<div class="{style}">{note}</div>', unsafe_allow_html=True)
