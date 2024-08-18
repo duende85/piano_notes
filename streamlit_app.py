@@ -72,6 +72,7 @@ def play_note(note):
         pass
 
 # Styling keys to resemble piano keys
+# Styling keys to resemble piano keys
 white_key_style = """
     <style>
     .white-key {
@@ -83,12 +84,11 @@ white_key_style = """
         display: flex;
         justify-content: center;
         align-items: center;
-        margin: 0 1px;
+        margin: 0;
         position: relative;
     }
     </style>
     """
-
 black_key_style = """
     <style>
     .black-key {
@@ -107,7 +107,6 @@ black_key_style = """
     }
     </style>
     """
-
 # Adjust the button size with global CSS
 button_style = """
     <style>
