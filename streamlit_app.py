@@ -39,12 +39,15 @@ KEY_SCORES = {
     'B6': 'key_scores/b6.png',
 }
 
-# Initialize session state for random image and feedback message
+# Initialize session state for random image, feedback message, and timer
 if 'random_image' not in st.session_state:
     st.session_state.random_image = random.choice(list(KEY_SCORES.items()))
 
 if 'feedback_message' not in st.session_state:
     st.session_state.feedback_message = ""
+
+if 'reload_time' not in st.session_state:
+    st.session_state.reload_time = None
 
 # Function to play the note and temporarily change the key's appearance
 def play_note_and_animate(note):
@@ -161,22 +164,20 @@ keys_layout = generate_keys_layout(octave_range=range(4, 7), active_octave=6)
 # Get the random image and its associated key
 random_key, random_image = st.session_state.random_image
 
-# Render the keys horizontally
-st.title("Score Sync App / Igor Wilk / August 2024")
-st.image(random_image, use_column_width=False)
-columns = st.columns(len(keys_layout))
-
 # Function to check if the pressed key matches the displayed key
 def check_key_press(note):
     if note == random_key:
         st.session_state.feedback_message = "Correct!"
         st.session_state.feedback_color = "green"
-        time.sleep(5)
-        st.session_state.random_image = random.choice(list(KEY_SCORES.items()))
-        st.experimental_rerun()
+        st.session_state.reload_time = time.time() + 5  # Set a reload time for 5 seconds in the future
     else:
         st.session_state.feedback_message = "Incorrect"
         st.session_state.feedback_color = "red"
+
+# Render the keys horizontally
+st.title("Score Sync App / Igor Wilk / August 2024")
+st.image(random_image, use_column_width=False)
+columns = st.columns(len(keys_layout))
 
 for i, (note, style, is_active, label) in enumerate(keys_layout):
     with columns[i]:
@@ -197,6 +198,13 @@ for i, (note, style, is_active, label) in enumerate(keys_layout):
 # Display feedback message
 if st.session_state.feedback_message:
     st.markdown(f"<h3 style='color:{st.session_state.feedback_color};'>{st.session_state.feedback_message}</h3>", unsafe_allow_html=True)
+
+# Check if it's time to reload the page
+if st.session_state.reload_time and time.time() > st.session_state.reload_time:
+    st.session_state.random_image = random.choice(list(KEY_SCORES.items()))
+    st.session_state.feedback_message = ""
+    st.session_state.reload_time = None
+    st.experimental_rerun()
 
 st.markdown("## Write anything you want below the piano here.")
 st.write("This is where you can add any text, charts, or other content you want to display below the piano visualization.")
