@@ -130,6 +130,7 @@ button_style = """
     """
 
 # Display styles
+st.image(KEY_SCORES['F6'], caption="F6 Chord", use_column_width=False)
 st.markdown(white_key_style, unsafe_allow_html=True)
 st.markdown(black_key_style, unsafe_allow_html=True)
 st.markdown(button_style, unsafe_allow_html=True)
@@ -170,5 +171,3 @@ for i, (note, style, is_active, label) in enumerate(keys_layout):
 
 st.markdown("## Write anything you want below the piano here.")
 st.write("This is where you can add any text, charts, or other content you want to display below the piano visualization.")
-
-st.image(KEY_SCORES['F6'], caption="F6 Chord", use_column_width=False)
