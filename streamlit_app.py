@@ -88,21 +88,23 @@ st.image(current_image_path, use_column_width=False)  # Directly use the file pa
 columns = st.columns(12)
 notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
+# Adjust the button layout for the piano keys
 for i, note in enumerate(notes):
     with columns[i]:
         full_note = f"{note}6"  # Adjust octave as needed
+        button_html = f'<div id="{full_note}" class="white-key"></div>'
         if st.button("▶", key=full_note):
             play_note_and_animate(full_note)
             check_key_press(full_note)
 
 # Display feedback message
 if st.session_state.feedback_message:
-    st.markdown(f"<h3 style='color:{st.session_state.feedback_color};'>{st.session_state.feedback_message}</h3>", unsafe_allow_html=True)
+    st.markdown(f"<h3 style='color:{st.session_state.feedback_color};">{st.session_state.feedback_message}</h3>", unsafe_allow_html=True)
 
 # Manual refresh button for the note score
 if st.button("Refresh Note Score"):
     st.session_state.current_key = random.choice(list(KEY_SCORES.keys()))
     st.session_state.feedback_message = ""
-    
-#st.markdown("## Write anything you want below the piano here.")
-#st.write("This is where you can add any text, charts, or other content you want to display below the piano visualization.")
+
+st.markdown("## Write anything you want below the piano here.")
+st.write("This is where you can add any text, charts, or other content you want to display below the piano visualization.")
