@@ -14,7 +14,7 @@ NOTE_FILES = {
     'D#6': 'notes/d_sharp_6.wav',
     'E6': 'notes/e6.wav',
     'F6': 'notes/f6.wav',
-    # 'F#6': 'notes/f_sharp_6.wav',
+    'F#6': 'notes/f_sharp_6.wav',
     'G6': 'notes/g6.wav',
     'G#6': 'notes/g_sharp_6.wav',
     'A6': 'notes/a6.wav',
