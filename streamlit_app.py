@@ -130,7 +130,6 @@ button_style = """
     """
 
 # Display styles
-st.image(KEY_SCORES['F6'], caption="F6 Chord", use_column_width=False)
 st.markdown(white_key_style, unsafe_allow_html=True)
 st.markdown(black_key_style, unsafe_allow_html=True)
 st.markdown(button_style, unsafe_allow_html=True)
@@ -151,7 +150,8 @@ def generate_keys_layout(octave_range, active_octave=None):
 keys_layout = generate_keys_layout(octave_range=range(4, 7), active_octave=6)
 
 # Render the keys horizontally
-st.title("Piano App")
+st.title("Score Sync App / Igor Wilk / August 2024")
+st.image(KEY_SCORES['F6'], caption="F6 Chord", use_column_width=False)
 columns = st.columns(len(keys_layout))
 
 for i, (note, style, is_active, label) in enumerate(keys_layout):
