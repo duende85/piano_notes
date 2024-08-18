@@ -34,10 +34,7 @@ KEY_SCORES = {
     'B6': 'key_scores/b6.png',
 }
 
-# Preload images into session state on the first run
-if 'images' not in st.session_state:
-    st.session_state.images = {key: st.image(KEY_SCORES[key], use_column_width=False) for key in KEY_SCORES}
-
+# Initialize session state if not already set
 if 'current_key' not in st.session_state:
     st.session_state.current_key = random.choice(list(KEY_SCORES.keys()))
 
@@ -82,9 +79,10 @@ def check_key_press(note):
         st.session_state.feedback_message = "Incorrect"
         st.session_state.feedback_color = "red"
 
-# Display the current key's image
+# Display the current key's image lazily
 st.title("Score Sync App / Igor Wilk / August 2024")
-st.session_state.images[st.session_state.current_key]  # Display the preloaded image
+current_image_path = KEY_SCORES[st.session_state.current_key]
+st.image(current_image_path, use_column_width=False)  # Directly use the file path without preloading
 
 # Display the piano keys
 columns = st.columns(12)
@@ -105,6 +103,6 @@ if st.session_state.feedback_message:
 if st.button("Refresh Note Score"):
     st.session_state.current_key = random.choice(list(KEY_SCORES.keys()))
     st.session_state.feedback_message = ""
-
-st.markdown("## Write anything you want below the piano here.")
-st.write("This is where you can add any text, charts, or other content you want to display below the piano visualization.")
+    
+#st.markdown("## Write anything you want below the piano here.")
+#st.write("This is where you can add any text, charts, or other content you want to display below the piano visualization.")
