@@ -46,13 +46,15 @@ KEY_SCORES = {
     'B6': 'key_scores/b6.png',
 }
 
-# Initialize session state if not already set
-if 'current_key' not in st.session_state or 'reset' in st.session_state:
+# Function to reset the session state
+def reset_session_state():
     st.session_state.current_key = random.choice(list(KEY_SCORES.keys()))
     st.session_state.feedback_message = ""
     st.session_state.audio_data = {}
-    if 'reset' in st.session_state:
-        del st.session_state['reset']
+
+# Initialize session state if not already set
+if 'current_key' not in st.session_state:
+    reset_session_state()
 
 # Function to play the note (only when pressed correctly)
 def play_note_if_correct(note):
@@ -201,8 +203,6 @@ for i, (note, style, label) in enumerate(keys_layout):
 if st.session_state.feedback_message:
     st.markdown(f"<h3 style='color:{st.session_state.feedback_color};'>{st.session_state.feedback_message}</h3>", unsafe_allow_html=True)
 
-# Manual refresh button for the note score with effective reset
+# Manual refresh button for the note score with full state reset
 if st.button("Refresh Note Score"):
-    # Trigger a reset of the session state
-    st.session_state['reset'] = True
-    st.experimental_rerun()
+    reset_session_state()
