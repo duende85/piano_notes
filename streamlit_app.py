@@ -46,9 +46,13 @@ KEY_SCORES = {
     'B6': 'key_scores/b6.png',
 }
 
+# Function to get a random image and its corresponding key
+def get_random_image():
+    return random.choice(list(KEY_SCORES.items()))
+
 # Initialize session state
 if 'random_key' not in st.session_state:
-    st.session_state.random_key, st.session_state.random_image = random.choice(list(KEY_SCORES.items()))
+    st.session_state.random_key, st.session_state.random_image = get_random_image()
 
 if 'feedback_message' not in st.session_state:
     st.session_state.feedback_message = ""
@@ -175,7 +179,6 @@ def check_key_press(note):
     else:
         st.session_state.feedback_message = "Incorrect"
         st.session_state.feedback_color = "red"
-        st.session_state.correct_guess = False
 
 # Render the keys horizontally
 st.title("Score Sync App / Igor Wilk / August 2024")
@@ -184,12 +187,9 @@ columns = st.columns(len(keys_layout))
 
 for i, (note, style, label) in enumerate(keys_layout):
     with columns[i]:
-        if st.session_state.correct_guess:
-            st.button("▶", key=note, disabled=True)
-        else:
-            if st.button("▶", key=note):
-                play_note_and_animate(note)
-                check_key_press(note)
+        if st.button("▶", key=note):
+            play_note_and_animate(note)
+            check_key_press(note)
         
         # Display the key with the note ID and add label if it's C4
         key_html = f'<div id="{note}" class="{style}">'
@@ -205,7 +205,7 @@ if st.session_state.feedback_message:
 # Manual refresh button for the note score
 if st.button("Refresh Note Score"):
     if st.session_state.correct_guess:  # Only allow refresh if the previous guess was correct
-        st.session_state.random_key, st.session_state.random_image = random.choice(list(KEY_SCORES.items()))
+        st.session_state.random_key, st.session_state.random_image = get_random_image()
         st.session_state.feedback_message = ""
         st.session_state.correct_guess = False
 
