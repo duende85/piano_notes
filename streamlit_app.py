@@ -151,7 +151,7 @@ keys_layout = generate_keys_layout(octave_range=range(4, 7), active_octave=6)
 
 # Render the keys horizontally
 st.title("Score Sync App / Igor Wilk / August 2024")
-st.image(KEY_SCORES['F6'], caption="F6 Chord", use_column_width=False)
+st.image(KEY_SCORES['F6'], use_column_width=False)
 columns = st.columns(len(keys_layout))
 
 for i, (note, style, is_active, label) in enumerate(keys_layout):
