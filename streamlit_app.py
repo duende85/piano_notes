@@ -108,11 +108,12 @@ black_key_style = """
     </style>
     """
 
+# Adjust the button size with global CSS
 button_style = """
     <style>
-    .small-button {
+    .stButton button {
         font-size: 10px;
-        padding: 2px 5px;
+        padding: 3px 6px;
     }
     </style>
     """
@@ -144,10 +145,10 @@ for i, (note, style, is_active) in enumerate(keys_layout):
     with columns[i]:
         # Add small play buttons above the keys
         if is_active:
-            if st.button("▶", key=note, help=f"Play {note}", use_container_width=True, css_class="small-button"):
+            if st.button("▶", key=note, help=f"Play {note}"):
                 play_note(note)
         else:
-            st.button("▶", key=note, disabled=True, use_container_width=True, css_class="small-button")
+            st.button("▶", key=note, disabled=True)
         
         # Display the key without note names
         st.markdown(f'<div class="{style}"></div>', unsafe_allow_html=True)
