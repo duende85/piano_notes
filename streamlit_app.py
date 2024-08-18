@@ -203,8 +203,7 @@ for i, (note, style, label) in enumerate(keys_layout):
 if st.session_state.feedback_message:
     st.markdown(f"<h3 style='color:{st.session_state.feedback_color};'>{st.session_state.feedback_message}</h3>", unsafe_allow_html=True)
 
-# Manual refresh button for the note score
+# Manual refresh button for the note score with full app refresh
 if st.button("Refresh Note Score"):
-    # Refresh the current key and reset the feedback message
-    st.session_state.current_key = random.choice(list(KEY_SCORES.keys()))
-    st.session_state.feedback_message = ""
+    # Resetting the entire app by using st.experimental_rerun to reload the script
+    st.experimental_rerun()
