@@ -217,7 +217,7 @@ if st.session_state.feedback_message:
 if st.button("Refresh Note Score"):
     st.session_state.random_key, st.session_state.random_image = get_random_image()
     st.session_state.feedback_message = ""
-    st.experimental_rerun()
+    # No need for experimental rerun, we manually refresh state and UI elements
 
 st.markdown("## Write anything you want below the piano here.")
 st.write("This is where you can add any text, charts, or other content you want to display below the piano visualization.")
