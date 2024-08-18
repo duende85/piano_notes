@@ -38,7 +38,7 @@ KEY_SCORES = {
     'D#6': 'key_scores/d_sharp_6.png',
     'E6': 'key_scores/e6.png',
     'F6': 'key_scores/f6.png',
-    'F#6': 'key_scores/d_sharp_6.png',
+    'F#6': 'key_scores/d_sharp_f.png',
     'G6': 'key_scores/g6.png',
     'G#6': 'key_scores/g_sharp_6.png',
     'A6': 'key_scores/a6.png',
@@ -56,31 +56,32 @@ if 'feedback_message' not in st.session_state:
 if 'audio_data' not in st.session_state:
     st.session_state.audio_data = {}
 
-# Function to play the note
-def play_note_and_animate(note):
-    file = NOTE_FILES.get(note)
-    if file and Path(file).exists():
-        if note not in st.session_state.audio_data:
-            with open(file, 'rb') as audio_file:
-                audio_bytes = audio_file.read()
-                st.session_state.audio_data[note] = base64.b64encode(audio_bytes).decode()
+# Function to play the note (only when pressed correctly)
+def play_note_if_correct(note):
+    if note == st.session_state.current_key:
+        file = NOTE_FILES.get(note)
+        if file and Path(file).exists():
+            if note not in st.session_state.audio_data:
+                with open(file, 'rb') as audio_file:
+                    audio_bytes = audio_file.read()
+                    st.session_state.audio_data[note] = base64.b64encode(audio_bytes).decode()
 
-        audio_html = f"""
-        <audio autoplay>
-        <source src="data:audio/wav;base64,{st.session_state.audio_data[note]}" type="audio/wav">
-        Your browser does not support the audio element.
-        </audio>
-        <script>
-        var keyElement = document.getElementById('{note}');
-        keyElement.classList.add('pressed');
-        setTimeout(function() {{
-            keyElement.classList.remove('pressed');
-        }}, 2000);
-        </script>
-        """
-        st.markdown(audio_html, unsafe_allow_html=True)
-    else:
-        st.warning(f"Note file for {note} not found.")
+            audio_html = f"""
+            <audio autoplay>
+            <source src="data:audio/wav;base64,{st.session_state.audio_data[note]}" type="audio/wav">
+            Your browser does not support the audio element.
+            </audio>
+            <script>
+            var keyElement = document.getElementById('{note}');
+            keyElement.classList.add('pressed');
+            setTimeout(function() {{
+                keyElement.classList.remove('pressed');
+            }}, 2000);
+            </script>
+            """
+            st.markdown(audio_html, unsafe_allow_html=True)
+        else:
+            st.warning(f"Note file for {note} not found.")
 
 # Styling for keys
 white_key_style = """
@@ -172,8 +173,10 @@ def check_key_press(note):
     if note == current_key:
         st.session_state.feedback_message = "Correct!"
         st.session_state.feedback_color = "green"
+        play_note_if_correct(note)  # Play the note only if correct
     else:
-        pass
+        st.session_state.feedback_message = "Incorrect"
+        st.session_state.feedback_color = "red"
 
 # Render the keys horizontally
 st.title("Score Sync App / Igor Wilk / August 2024")
@@ -188,7 +191,6 @@ columns = st.columns(len(keys_layout))
 for i, (note, style, label) in enumerate(keys_layout):
     with columns[i]:
         if st.button("▶", key=note):
-            play_note_and_animate(note)
             check_key_press(note)
         
         # Display the key with the note ID and add label if it's C4
@@ -207,4 +209,3 @@ if st.button("Refresh Note Score"):
     # Refresh the current key and reset the feedback message
     st.session_state.current_key = random.choice(list(KEY_SCORES.keys()))
     st.session_state.feedback_message = ""
-
