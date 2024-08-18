@@ -79,23 +79,91 @@ def check_key_press(note):
         st.session_state.feedback_message = "Incorrect"
         st.session_state.feedback_color = "red"
 
+# Styling for keys
+white_key_style = """
+    <style>
+    .white-key {
+        background-color: white;
+        color: black;
+        border: 1px solid black;
+        width: 60px;
+        height: 200px;
+        display: inline-block;
+        margin-right: -2px;
+        z-index: 1;
+        transition: transform 0.1s ease;
+    }
+    .white-key.pressed {
+        background-color: lightgray;
+        transform: translateY(5px);
+    }
+    .white-key .label {
+        position: absolute;
+        bottom: 5px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 14px;
+    }
+    </style>
+    """
+
+black_key_style = """
+    <style>
+    .black-key {
+        background-color: black;
+        color: white;
+        border: 1px solid black;
+        width: 40px;
+        height: 120px;
+        display: inline-block;
+        position: absolute;
+        margin-left: -20px;
+        z-index: 3;
+        top: 0;
+        transition: transform 0.1s ease;
+    }
+    .black-key.pressed {
+        background-color: darkgray;
+        transform: translateY(5px);
+    }
+    </style>
+    """
+
+# Display styles
+st.markdown(white_key_style, unsafe_allow_html=True)
+st.markdown(black_key_style, unsafe_allow_html=True)
+
 # Display the current key's image lazily
 st.title("Score Sync App / Igor Wilk / August 2024")
 current_image_path = KEY_SCORES[st.session_state.current_key]
 st.image(current_image_path, use_column_width=False)  # Directly use the file path without preloading
 
 # Display the piano keys
-columns = st.columns(12)
-notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+columns = st.columns(14)
+keys = [
+    ("C", "white"),
+    ("C#", "black"),
+    ("D", "white"),
+    ("D#", "black"),
+    ("E", "white"),
+    ("F", "white"),
+    ("F#", "black"),
+    ("G", "white"),
+    ("G#", "black"),
+    ("A", "white"),
+    ("A#", "black"),
+    ("B", "white")
+]
 
 # Adjust the button layout for the piano keys
-for i, note in enumerate(notes):
+for i, (note, style) in enumerate(keys):
     with columns[i]:
         full_note = f"{note}6"  # Adjust octave as needed
-        button_html = f'<div id="{full_note}" class="white-key"></div>'
         if st.button("▶", key=full_note):
             play_note_and_animate(full_note)
             check_key_press(full_note)
+        key_html = f'<div id="{full_note}" class="{style}-key"></div>'
+        st.markdown(key_html, unsafe_allow_html=True)
 
 # Display feedback message
 if st.session_state.feedback_message:
