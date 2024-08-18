@@ -3,7 +3,6 @@ import soundfile as sf
 from pathlib import Path
 import base64
 import streamlit.components.v1 as components
-import time
 
 st.set_page_config(layout="wide")
 
@@ -37,9 +36,10 @@ def play_note_and_animate(note):
         Your browser does not support the audio element.
         </audio>
         <script>
-        document.getElementById('{note}').classList.add('pressed');
+        var keyElement = document.getElementById('{note}');
+        keyElement.classList.add('pressed');
         setTimeout(function() {{
-            document.getElementById('{note}').classList.remove('pressed');
+            keyElement.classList.remove('pressed');
         }}, 2000);
         </script>
         """
@@ -60,6 +60,7 @@ white_key_style = """
         position: relative;
         margin-right: -2px;
         z-index: 1;
+        transition: transform 0.1s ease;
     }
     .white-key.pressed {
         background-color: lightgray;
@@ -81,6 +82,7 @@ black_key_style = """
         margin-left: -20px;
         z-index: 2;
         top: 0;
+        transition: transform 0.1s ease;
     }
     .black-key.pressed {
         background-color: darkgray;
