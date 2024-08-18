@@ -121,7 +121,7 @@ def display_random_chord_image():
     chord_images = list(chord_images_dir.glob("*.png"))
     if chord_images:
         random_chord_image = random.choice(chord_images)
-        st.image(str(random_chord_image), use_column_width=True)
+        st.image(str(random_chord_image), use_column_width=False, width=120)  # Set width to roughly twice the height of the white key (120px)
 
 # Display styles
 st.markdown(white_key_style, unsafe_allow_html=True)
