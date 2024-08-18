@@ -4,7 +4,6 @@ from pathlib import Path
 import base64
 import random
 import streamlit.components.v1 as components
-import time
 
 st.set_page_config(layout="wide")
 
@@ -53,15 +52,12 @@ KEY_SCORES = {
     'B6': 'key_scores/b6.png',
 }
 
-# Initialize session state for random image, feedback message, and timer
+# Initialize session state for random image and feedback message
 if 'random_image' not in st.session_state:
     st.session_state.random_image = random.choice(list(KEY_SCORES.items()))
 
 if 'feedback_message' not in st.session_state:
     st.session_state.feedback_message = ""
-
-if 'reload_time' not in st.session_state:
-    st.session_state.reload_time = None
 
 # Function to play the note and temporarily change the key's appearance
 def play_note_and_animate(note):
@@ -125,7 +121,7 @@ black_key_style = """
         background-color: black;
         color: white;
         border: 1px solid black;
-        width: 30px;
+        width: 40px;
         height: 120px;  /* 60% of the height of white keys */
         display: inline-block;
         position: absolute;
@@ -183,7 +179,6 @@ def check_key_press(note):
     if note == random_key:
         st.session_state.feedback_message = "Correct!"
         st.session_state.feedback_color = "green"
-        st.session_state.reload_time = time.time() + 5  # Set a reload time for 5 seconds in the future
     else:
         st.session_state.feedback_message = "Incorrect"
         st.session_state.feedback_color = "red"
@@ -213,12 +208,10 @@ for i, (note, style, is_active, label) in enumerate(keys_layout):
 if st.session_state.feedback_message:
     st.markdown(f"<h3 style='color:{st.session_state.feedback_color};'>{st.session_state.feedback_message}</h3>", unsafe_allow_html=True)
 
-# Check if it's time to reload the page
-if st.session_state.reload_time and time.time() > st.session_state.reload_time:
+# Manual refresh button for the note score
+if st.button("Refresh Note Score"):
     st.session_state.random_image = random.choice(list(KEY_SCORES.items()))
     st.session_state.feedback_message = ""
-    st.session_state.reload_time = None
-    st.experimental_rerun()
 
 st.markdown("## Write anything you want below the piano here.")
 st.write("This is where you can add any text, charts, or other content you want to display below the piano visualization.")
