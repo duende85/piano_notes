@@ -47,7 +47,7 @@ def play_note_and_animate(note):
     else:
         pass
 
-# Styling keys to resemble piano keys with a 60% height ratio for black keys
+# Styling keys to resemble piano keys
 white_key_style = """
     <style>
     .white-key {
@@ -85,7 +85,7 @@ black_key_style = """
         color: white;
         border: 1px solid black;
         width: 40px;
-        height: 120px;  /* 60% of the height of white keys */
+        height: 120px;
         display: inline-block;
         position: absolute;
         margin-left: -20px;
