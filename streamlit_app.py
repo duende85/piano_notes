@@ -152,3 +152,6 @@ for i, (note, style, is_active, label) in enumerate(keys_layout):
             key_html += f'<div class="label">{label}</div>'
         key_html += '</div>'
         st.markdown(key_html, unsafe_allow_html=True)
+
+st.markdown("## Write anything you want below the piano here.")
+st.write("This is where you can add any text, charts, or other content you want to display below the piano visualization.")
