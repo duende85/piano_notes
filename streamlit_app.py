@@ -23,7 +23,6 @@ NOTE_FILES = {
     'D#6': 'notes/d_sharp_6.wav',
     'E6': 'notes/e6.wav',
     'F6': 'notes/f6.wav',
-    'F#6': 'notes/f_sharp_6.wav',
     'G6': 'notes/g6.wav',
     'G#6': 'notes/g_sharp_6.wav',
     'A6': 'notes/a6.wav',
@@ -38,7 +37,6 @@ KEY_SCORES = {
     'D#6': 'key_scores/d_sharp_6.png',
     'E6': 'key_scores/e6.png',
     'F6': 'key_scores/f6.png',
-    'F#6': 'key_scores/f_sharp_6.png',
     'G6': 'key_scores/g6.png',
     'G#6': 'key_scores/g_sharp_6.png',
     'A6': 'key_scores/a6.png',
@@ -178,7 +176,12 @@ def check_key_press(note):
 
 # Render the keys horizontally
 st.title("Score Sync App / Igor Wilk / August 2024")
-st.image(current_image_path, use_column_width=False)
+try:
+    st.image(current_image_path, use_column_width=False)
+except Exception as e:
+    st.error(f"Error loading image: {e}")
+    st.markdown(f"<div style='font-size:24px; color:red;'>Error displaying {current_key}</div>", unsafe_allow_html=True)
+
 columns = st.columns(len(keys_layout))
 
 for i, (note, style, label) in enumerate(keys_layout):
@@ -199,10 +202,8 @@ if st.session_state.feedback_message:
     st.markdown(f"<h3 style='color:{st.session_state.feedback_color};'>{st.session_state.feedback_message}</h3>", unsafe_allow_html=True)
 
 # Manual refresh button for the note score
-if st.button("Refresh Note Score (press 2x)"):
+if st.button("Refresh Note Score"):
     # Refresh the current key and reset the feedback message
     st.session_state.current_key = random.choice(list(KEY_SCORES.keys()))
     st.session_state.feedback_message = ""
 
-#st.markdown("## Write anything you want below the piano here.")
-#st.write("This is where you can add any text, charts, or other content you want to display below the piano visualization.")
