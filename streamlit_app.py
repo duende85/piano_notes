@@ -76,16 +76,18 @@ piano_style = """
     <style>
     .piano-container {
         display: flex;
-        align-items: flex-end;
         justify-content: center;
-        height: 250px;
+        align-items: center;
+        margin: auto;
+        padding: 10px;
+        width: auto;
     }
     .white-key {
         background-color: white;
         border: 1px solid black;
         width: 60px;
         height: 240px;
-        margin-right: -5px;
+        margin: 0;
         z-index: 1;
         position: relative;
     }
@@ -94,16 +96,10 @@ piano_style = """
         border: 1px solid black;
         width: 40px;
         height: 150px;
+        margin-left: -20px;
         margin-right: -20px;
         z-index: 2;
         position: relative;
-        margin-left: -20px;
-    }
-    .button-container {
-        height: 20px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
     }
     </style>
     """
@@ -129,15 +125,8 @@ keys_layout = generate_keys_layout(octave_range=range(4, 7), active_octave=6)
 st.title("Piano App")
 st.markdown('<div class="piano-container">', unsafe_allow_html=True)
 for i, (note, style, is_active) in enumerate(keys_layout):
-    if style == "black-key":
-        st.markdown('<div class="button-container">', unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
-    
     st.markdown(f'<div class="{style}"></div>', unsafe_allow_html=True)
-    if is_active:
-        if style == "white-key":
-            st.markdown('<div class="button-container">', unsafe_allow_html=True)
-            if st.button("▶", key=note, help=f"Play {note}", use_container_width=True):
-                play_note(note)
-            st.markdown('</div>', unsafe_allow_html=True)
+    if is_active and style == "white-key":
+        if st.button("▶", key=note, help=f"Play {note}"):
+            play_note(note)
 st.markdown('</div>', unsafe_allow_html=True)
