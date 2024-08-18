@@ -2,6 +2,7 @@ import streamlit as st
 import soundfile as sf
 from pathlib import Path
 import random
+import base64
 import streamlit.components.v1 as components
 
 st.set_page_config(layout="wide")
@@ -56,23 +57,27 @@ if 'feedback_message' not in st.session_state:
 def play_note_and_animate(note):
     file = NOTE_FILES.get(note)
     if file and Path(file).exists():
-        audio_file = open(file, 'rb')
-        audio_bytes = audio_file.read()
+        try:
+            with open(file, 'rb') as audio_file:
+                audio_bytes = audio_file.read()
+                base64_audio = base64.b64encode(audio_bytes).decode()
 
-        audio_html = f"""
-        <audio id="audio" autoplay>
-        <source src="data:audio/wav;base64,{base64.b64encode(audio_bytes).decode()}" type="audio/wav">
-        Your browser does not support the audio element.
-        </audio>
-        <script>
-        var keyElement = document.getElementById('{note}');
-        keyElement.classList.add('pressed');
-        setTimeout(function() {{
-            keyElement.classList.remove('pressed');
-        }}, 2000);
-        </script>
-        """
-        components.html(audio_html, height=0, width=0)
+                audio_html = f"""
+                <audio id="audio" autoplay>
+                <source src="data:audio/wav;base64,{base64_audio}" type="audio/wav">
+                Your browser does not support the audio element.
+                </audio>
+                <script>
+                var keyElement = document.getElementById('{note}');
+                keyElement.classList.add('pressed');
+                setTimeout(function() {{
+                    keyElement.classList.remove('pressed');
+                }}, 2000);
+                </script>
+                """
+                components.html(audio_html, height=0, width=0)
+        except Exception as e:
+            st.error(f"Error playing the note: {e}")
     else:
         st.warning(f"Note file for {note} not found.")
 
