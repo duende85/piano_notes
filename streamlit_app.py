@@ -38,7 +38,7 @@ KEY_SCORES = {
     'D#6': 'key_scores/d_sharp_6.png',
     'E6': 'key_scores/e6.png',
     'F6': 'key_scores/f6.png',
-    'F#6': 'key_scores/d_sharp_f.png',
+    'F#6': 'key_scores/f_sharp_6.png',  # Fixed filename
     'G6': 'key_scores/g6.png',
     'G#6': 'key_scores/g_sharp_6.png',
     'A6': 'key_scores/a6.png',
@@ -58,30 +58,29 @@ if 'audio_data' not in st.session_state:
 
 # Function to play the note (only when pressed correctly)
 def play_note_if_correct(note):
-    if note == st.session_state.current_key:
-        file = NOTE_FILES.get(note)
-        if file and Path(file).exists():
-            if note not in st.session_state.audio_data:
-                with open(file, 'rb') as audio_file:
-                    audio_bytes = audio_file.read()
-                    st.session_state.audio_data[note] = base64.b64encode(audio_bytes).decode()
+    file = NOTE_FILES.get(note)
+    if file and Path(file).exists():
+        if note not in st.session_state.audio_data:
+            with open(file, 'rb') as audio_file:
+                audio_bytes = audio_file.read()
+                st.session_state.audio_data[note] = base64.b64encode(audio_bytes).decode()
 
-            audio_html = f"""
-            <audio autoplay>
-            <source src="data:audio/wav;base64,{st.session_state.audio_data[note]}" type="audio/wav">
-            Your browser does not support the audio element.
-            </audio>
-            <script>
-            var keyElement = document.getElementById('{note}');
-            keyElement.classList.add('pressed');
-            setTimeout(function() {{
-                keyElement.classList.remove('pressed');
-            }}, 2000);
-            </script>
-            """
-            st.markdown(audio_html, unsafe_allow_html=True)
-        else:
-            st.warning(f"Note file for {note} not found.")
+        audio_html = f"""
+        <audio autoplay>
+        <source src="data:audio/wav;base64,{st.session_state.audio_data[note]}" type="audio/wav">
+        Your browser does not support the audio element.
+        </audio>
+        <script>
+        var keyElement = document.getElementById('{note}');
+        keyElement.classList.add('pressed');
+        setTimeout(function() {{
+            keyElement.classList.remove('pressed');
+        }}, 2000);
+        </script>
+        """
+        st.markdown(audio_html, unsafe_allow_html=True)
+    else:
+        st.warning(f"Note file for {note} not found.")
 
 # Styling for keys
 white_key_style = """
