@@ -131,9 +131,8 @@ black_key_style = """
         line-height: 100px;
         font-size: 16px;
         margin: 0 -20px;
-        z-index: 1;
+        z-index: 2;
         position: absolute;
-        top: 0;
     }
     </style>
     """
@@ -154,7 +153,10 @@ st.title("Piano App")
 st.write('<div style="position: relative; display: flex; justify-content: center;">', unsafe_allow_html=True)
 
 for note, style in keys_layout:
-    st.markdown(f'<div class="{style}"><button>{note}</button></div>', unsafe_allow_html=True)
+    if "black" in style:
+        st.write(f'<div class="{style}">{note}</div>', unsafe_allow_html=True)
+    else:
+        st.write(f'<div class="{style}">{note}</div>', unsafe_allow_html=True)
 
 st.write('</div>', unsafe_allow_html=True)
 
