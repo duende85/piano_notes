@@ -108,9 +108,19 @@ black_key_style = """
     </style>
     """
 
+button_style = """
+    <style>
+    .small-button {
+        font-size: 10px;
+        padding: 2px 5px;
+    }
+    </style>
+    """
+
 # Display styles
 st.markdown(white_key_style, unsafe_allow_html=True)
 st.markdown(black_key_style, unsafe_allow_html=True)
+st.markdown(button_style, unsafe_allow_html=True)
 
 # Function to generate keys layout
 def generate_keys_layout(octave_range, active_octave=None):
@@ -134,10 +144,10 @@ for i, (note, style, is_active) in enumerate(keys_layout):
     with columns[i]:
         # Add small play buttons above the keys
         if is_active:
-            if st.button("▶", key=note, help=f"Play {note}", key_size=16):
+            if st.button("▶", key=note, help=f"Play {note}", use_container_width=True, css_class="small-button"):
                 play_note(note)
         else:
-            st.button("▶", key=note, disabled=True, key_size=16)
+            st.button("▶", key=note, disabled=True, use_container_width=True, css_class="small-button")
         
         # Display the key without note names
         st.markdown(f'<div class="{style}"></div>', unsafe_allow_html=True)
