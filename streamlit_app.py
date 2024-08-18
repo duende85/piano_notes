@@ -202,5 +202,5 @@ if st.button("Refresh Note Score"):
     st.session_state.current_key = random.choice(list(KEY_SCORES.keys()))
     st.session_state.feedback_message = ""
 
-st.markdown("## Write anything you want below the piano here.")
-st.write("This is where you can add any text, charts, or other content you want to display below the piano visualization.")
+#st.markdown("## Write anything you want below the piano here.")
+#st.write("This is where you can add any text, charts, or other content you want to display below the piano visualization.")
