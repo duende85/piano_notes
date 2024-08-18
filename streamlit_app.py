@@ -119,7 +119,8 @@ def generate_keys_layout(octave_range, active_octave=None):
         for note in ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']:
             key_name = f'{note}{octave}'
             style = 'black-key' if '#' in note else 'white-key'
-            keys_layout.append((key_name, style, octave == active_octave))
+            is_active = octave == active_octave and key_name in NOTE_FILES
+            keys_layout.append((key_name, style, is_active))
     return keys_layout
 
 # Define the layout for the keys (Octaves 4, 5, 6)
@@ -131,6 +132,12 @@ columns = st.columns(len(keys_layout))
 
 for i, (note, style, is_active) in enumerate(keys_layout):
     with columns[i]:
-        if is_active and st.button("▶", key=note, help=f"Play {note}"):
-            play_note(note)
-        st.markdown(f'<div class="{style}">{note}</div>', unsafe_allow_html=True)
+        # Add small play buttons above the keys
+        if is_active:
+            if st.button("▶", key=note, help=f"Play {note}", key_size=16):
+                play_note(note)
+        else:
+            st.button("▶", key=note, disabled=True, key_size=16)
+        
+        # Display the key without note names
+        st.markdown(f'<div class="{style}"></div>', unsafe_allow_html=True)
