@@ -131,7 +131,8 @@ def generate_keys_layout(octave_range, active_octave=None):
             key_name = f'{note}{octave}'
             style = 'black-key' if '#' in note else 'white-key'
             is_active = octave == active_octave and key_name in NOTE_FILES
-            keys_layout.append((key_name, style, is_active))
+            label = 'C4' if key_name == 'C4' else ''
+            keys_layout.append((key_name, style, is_active, label))
     return keys_layout
 
 # Define the layout for the keys (Octaves 4, 5, 6)
@@ -141,7 +142,7 @@ keys_layout = generate_keys_layout(octave_range=range(4, 7), active_octave=6)
 st.title("Piano App")
 columns = st.columns(len(keys_layout))
 
-for i, (note, style, is_active) in enumerate(keys_layout):
+for i, (note, style, is_active, label) in enumerate(keys_layout):
     with columns[i]:
         # Add small play buttons above the keys
         if is_active:
@@ -150,5 +151,8 @@ for i, (note, style, is_active) in enumerate(keys_layout):
         else:
             st.button("▶", key=note, disabled=True)
         
-        # Display the key without note names
-        st.markdown(f'<div class="{style}"></div>', unsafe_allow_html=True)
+        # Display the key with or without label
+        if label:
+            st.markdown(f'<div class="{style}">{label}</div>', unsafe_allow_html=True)
+        else:
+            st.markdown(f'<div class="{style}"></div>', unsafe_allow_html=True)
