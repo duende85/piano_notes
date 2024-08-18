@@ -5,6 +5,16 @@ from pathlib import Path
 
 st.set_page_config(layout="wide")
 
+# Custom CSS to reduce whitespace
+st.markdown("""
+    <style>
+    .block-container {
+        padding-top: 1rem;
+        padding-bottom: 0rem;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
 # Notes and their corresponding files
 NOTE_FILES = {
     'C6': 'notes/c6.wav',
@@ -70,15 +80,6 @@ def play_note_and_animate(note):
     else:
         st.warning(f"Note file for {note} not found.")
 
-# Function to check if the pressed key matches the displayed key
-def check_key_press(note):
-    if note == st.session_state.current_key:
-        st.session_state.feedback_message = "Correct!"
-        st.session_state.feedback_color = "green"
-    else:
-        st.session_state.feedback_message = "Incorrect"
-        st.session_state.feedback_color = "red"
-
 # Styling for keys
 white_key_style = """
     <style>
@@ -129,45 +130,66 @@ black_key_style = """
     </style>
     """
 
+button_style = """
+    <style>
+    .stButton button {
+        font-size: 10px;
+        padding: 3px 6px;
+    }
+    .stColumn > div {
+        padding: 0px;
+    }
+    </style>
+    """
+
 # Display styles
 st.markdown(white_key_style, unsafe_allow_html=True)
 st.markdown(black_key_style, unsafe_allow_html=True)
+st.markdown(button_style, unsafe_allow_html=True)
 
-# Display the current key's image
+# Function to generate keys layout
+def generate_keys_layout(octave_range):
+    keys_layout = []
+    for octave in octave_range:
+        for note in ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']:
+            key_name = f'{note}{octave}'
+            style = 'black-key' if '#' in note else 'white-key'
+            label = 'C4' if key_name == 'C4' else ''
+            keys_layout.append((key_name, style, label))
+    return keys_layout
+
+# Define the layout for the keys (Octaves 4, 5, 6)
+keys_layout = generate_keys_layout(octave_range=range(4, 7))
+
+# Current key being displayed
+current_key = st.session_state.current_key
+current_image_path = KEY_SCORES[current_key]
+
+# Function to check if the pressed key matches the displayed key
+def check_key_press(note):
+    if note == current_key:
+        st.session_state.feedback_message = "Correct!"
+        st.session_state.feedback_color = "green"
+    else:
+        st.session_state.feedback_message = "Incorrect"
+        st.session_state.feedback_color = "red"
+
+# Render the keys horizontally
 st.title("Score Sync App / Igor Wilk / August 2024")
-current_image_path = KEY_SCORES[st.session_state.current_key]
+st.image(current_image_path, use_column_width=False)
+columns = st.columns(len(keys_layout))
 
-try:
-    st.image(current_image_path, use_column_width=False)
-except Exception as e:
-    st.error(f"Error displaying image: {e}")
-    st.write(f"Currently selected note: {st.session_state.current_key}")  # Fallback to text
-
-# Display the piano keys
-columns = st.columns(14)
-keys = [
-    ("C", "white"),
-    ("C#", "black"),
-    ("D", "white"),
-    ("D#", "black"),
-    ("E", "white"),
-    ("F", "white"),
-    ("F#", "black"),
-    ("G", "white"),
-    ("G#", "black"),
-    ("A", "white"),
-    ("A#", "black"),
-    ("B", "white")
-]
-
-# Adjust the button layout for the piano keys
-for i, (note, style) in enumerate(keys):
+for i, (note, style, label) in enumerate(keys_layout):
     with columns[i]:
-        full_note = f"{note}6"  # Adjust octave as needed
-        if st.button("▶", key=full_note):
-            play_note_and_animate(full_note)
-            check_key_press(full_note)
-        key_html = f'<div id="{full_note}" class="{style}-key"></div>'
+        if st.button("▶", key=note):
+            play_note_and_animate(note)
+            check_key_press(note)
+        
+        # Display the key with the note ID and add label if it's C4
+        key_html = f'<div id="{note}" class="{style}">'
+        if label:
+            key_html += f'<div class="label">{label}</div>'
+        key_html += '</div>'
         st.markdown(key_html, unsafe_allow_html=True)
 
 # Display feedback message
@@ -176,6 +198,7 @@ if st.session_state.feedback_message:
 
 # Manual refresh button for the note score
 if st.button("Refresh Note Score"):
+    # Refresh the current key and reset the feedback message
     st.session_state.current_key = random.choice(list(KEY_SCORES.keys()))
     st.session_state.feedback_message = ""
 
