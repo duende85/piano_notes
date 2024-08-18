@@ -106,13 +106,14 @@ white_key_style = """
         background-color: white;
         color: black;
         border: 1px solid black;
-        width: 50px;
-        height: 150px;
+        width: 60px;
+        height: 200px;
         display: inline-block;
         text-align: center;
-        line-height: 150px;
+        line-height: 180px;
         font-size: 20px;
         margin: 0 2px;
+        position: relative;
     }
     </style>
     """
@@ -123,15 +124,16 @@ black_key_style = """
         background-color: black;
         color: white;
         border: 1px solid black;
-        width: 35px;
-        height: 100px;
+        width: 40px;
+        height: 120px;
         display: inline-block;
         text-align: center;
         line-height: 100px;
         font-size: 16px;
-        margin: 0 -17px;
-        position: relative;
+        margin: 0 -20px;
         z-index: 1;
+        position: absolute;
+        top: 0;
     }
     </style>
     """
@@ -147,13 +149,16 @@ keys_layout = [
     ('G#6', 'black-key'), ('A6', 'white-key'), ('A#6', 'black-key'), ('B6', 'white-key')
 ]
 
-# Render the keys
+# Render the keys horizontally
 st.title("Piano App")
-st.write("<div>", unsafe_allow_html=True)
+st.write('<div style="position: relative; display: flex; justify-content: center;">', unsafe_allow_html=True)
 
 for note, style in keys_layout:
+    st.markdown(f'<div class="{style}"><button>{note}</button></div>', unsafe_allow_html=True)
+
+st.write('</div>', unsafe_allow_html=True)
+
+# Link buttons to note playing
+for note, _ in keys_layout:
     if st.button(note, key=note):
         play_note(note)
-    st.markdown(f'<div class="{style}">{note}</div>', unsafe_allow_html=True)
-
-st.write("</div>", unsafe_allow_html=True)
