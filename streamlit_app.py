@@ -71,34 +71,39 @@ def play_note(note):
     else:
         pass
 
-# CSS for a more realistic piano look
+# CSS for the piano keys
 piano_style = """
     <style>
+    .piano-container {
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        height: 250px;
+    }
     .white-key {
         background-color: white;
         border: 1px solid black;
         width: 60px;
-        height: 200px;
-        display: inline-block;
-        margin: 0 -4px;
-        position: relative;
+        height: 240px;
+        margin-right: -5px;
         z-index: 1;
+        position: relative;
     }
     .black-key {
         background-color: black;
         border: 1px solid black;
         width: 40px;
-        height: 120px;
-        display: inline-block;
-        margin: 0 -20px;
-        position: relative;
-        top: 0;
+        height: 150px;
+        margin-right: -20px;
         z-index: 2;
-    }
-    .key-container {
-        display: inline-block;
         position: relative;
-        margin: 0;
+        margin-left: -20px;
+    }
+    .button-container {
+        height: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
     </style>
     """
@@ -122,12 +127,17 @@ keys_layout = generate_keys_layout(octave_range=range(4, 7), active_octave=6)
 
 # Render the keys horizontally with proper overlap
 st.title("Piano App")
-st.markdown('<div style="display:flex; justify-content:center;">', unsafe_allow_html=True)
+st.markdown('<div class="piano-container">', unsafe_allow_html=True)
 for i, (note, style, is_active) in enumerate(keys_layout):
+    if style == "black-key":
+        st.markdown('<div class="button-container">', unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+    
+    st.markdown(f'<div class="{style}"></div>', unsafe_allow_html=True)
     if is_active:
-        if st.button("▶", key=note, help=f"Play {note}", use_container_width=True):
-            play_note(note)
-    else:
-        st.button("▶", key=note, disabled=True, use_container_width=True)
-    st.markdown(f'<div class="key-container"><div class="{style}"></div></div>', unsafe_allow_html=True)
+        if style == "white-key":
+            st.markdown('<div class="button-container">', unsafe_allow_html=True)
+            if st.button("▶", key=note, help=f"Play {note}", use_container_width=True):
+                play_note(note)
+            st.markdown('</div>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
