@@ -23,7 +23,6 @@ NOTE_FILES = {
     'D#6': 'notes/d_sharp_6.wav',
     'E6': 'notes/e6.wav',
     'F6': 'notes/f6.wav',
-    'F#6': 'notes/f_sharp_6.wav',  # Added F#6
     'G6': 'notes/g6.wav',
     'G#6': 'notes/g_sharp_6.wav',
     'A6': 'notes/a6.wav',
@@ -38,7 +37,6 @@ KEY_SCORES = {
     'D#6': 'key_scores/d_sharp_6.png',
     'E6': 'key_scores/e6.png',
     'F6': 'key_scores/f6.png',
-    'F#6': 'key_scores/f_sharp_6.png',  # Added F#6
     'G6': 'key_scores/g6.png',
     'G#6': 'key_scores/g_sharp_6.png',
     'A6': 'key_scores/a6.png',
@@ -137,7 +135,7 @@ st.title("Score Sync App / Igor Wilk / August 2024")
 current_image_path = KEY_SCORES[st.session_state.current_key]
 st.image(current_image_path, use_column_width=False)
 
-columns = st.columns(13)
+columns = st.columns(12)
 notes = ['C6', 'C#6', 'D6', 'D#6', 'E6', 'F6', 'F#6', 'G6', 'G#6', 'A6', 'A#6', 'B6']
 
 for i, note in enumerate(notes):
