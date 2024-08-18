@@ -46,19 +46,14 @@ KEY_SCORES = {
     'B6': 'key_scores/b6.png',
 }
 
-# Function to get a random image and its corresponding key
-def get_random_image():
-    return random.choice(list(KEY_SCORES.items()))
+# Preload images and their corresponding keys into a list
+preloaded_images = list(KEY_SCORES.items())
 
-# Initialize session state
-if 'random_key' not in st.session_state:
-    st.session_state.random_key, st.session_state.random_image = get_random_image()
-
+# Initialize state if not already set
+if 'current_image' not in st.session_state:
+    st.session_state.current_image = random.choice(preloaded_images)
 if 'feedback_message' not in st.session_state:
     st.session_state.feedback_message = ""
-
-if 'correct_guess' not in st.session_state:
-    st.session_state.correct_guess = False
 
 # Function to play the note
 def play_note_and_animate(note):
@@ -166,23 +161,21 @@ def generate_keys_layout(octave_range):
 # Define the layout for the keys (Octaves 4, 5, 6)
 keys_layout = generate_keys_layout(octave_range=range(4, 7))
 
-# Get the random image and its associated key from session state
-random_key = st.session_state.random_key
-random_image = st.session_state.random_image
+# Current key and image being displayed
+current_key, current_image = st.session_state.current_image
 
 # Function to check if the pressed key matches the displayed key
 def check_key_press(note):
-    if note == random_key:
+    if note == current_key:
         st.session_state.feedback_message = "Correct!"
         st.session_state.feedback_color = "green"
-        st.session_state.correct_guess = True
     else:
         st.session_state.feedback_message = "Incorrect"
         st.session_state.feedback_color = "red"
 
 # Render the keys horizontally
 st.title("Score Sync App / Igor Wilk / August 2024")
-st.image(random_image, use_column_width=False)
+st.image(current_image, use_column_width=False)
 columns = st.columns(len(keys_layout))
 
 for i, (note, style, label) in enumerate(keys_layout):
@@ -204,10 +197,9 @@ if st.session_state.feedback_message:
 
 # Manual refresh button for the note score
 if st.button("Refresh Note Score"):
-    if st.session_state.correct_guess:  # Only allow refresh if the previous guess was correct
-        st.session_state.random_key, st.session_state.random_image = get_random_image()
+    if st.session_state.feedback_message == "Correct!":  # Only refresh after correct guess
+        st.session_state.current_image = random.choice(preloaded_images)
         st.session_state.feedback_message = ""
-        st.session_state.correct_guess = False
 
 st.markdown("## Write anything you want below the piano here.")
 st.write("This is where you can add any text, charts, or other content you want to display below the piano visualization.")
