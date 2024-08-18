@@ -66,7 +66,7 @@ def play_note(note):
 
 # Create the piano keys
 keys = []
-for octave in range(3, 7):
+for octave in range(5, 7):
     for key in ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']:
         keys.append(f'{key}{octave}')
 
