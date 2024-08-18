@@ -8,16 +8,16 @@ import time
 
 st.set_page_config(layout="wide")
 
-# Add custom CSS to reduce the white space
+# Add custom CSS to reduce the white space without cropping the text
 st.markdown("""
     <style>
-    /* Reduce the space above the content */
+    /* Reduce the space above the content without cropping the title */
     .block-container {
-        padding-top: 0rem;
+        padding-top: 1rem;
         padding-bottom: 0rem;
     }
     .stApp {
-        margin-top: -50px;
+        margin-top: 0px;  /* Remove the negative margin */
     }
     </style>
     """, unsafe_allow_html=True)
