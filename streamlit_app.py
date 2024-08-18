@@ -79,6 +79,7 @@ def play_note(note):
         """
         components.html(audio_html, height=0, width=0)
     else:
+        pass
 
 def play_note2(note):
     file = NOTE_FILES.get(note)
