@@ -173,8 +173,7 @@ def check_key_press(note):
         st.session_state.feedback_message = "Correct!"
         st.session_state.feedback_color = "green"
     else:
-        st.session_state.feedback_message = "Incorrect"
-        st.session_state.feedback_color = "red"
+        pass
 
 # Render the keys horizontally
 st.title("Score Sync App / Igor Wilk / August 2024")
