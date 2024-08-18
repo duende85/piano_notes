@@ -92,7 +92,7 @@ white_key_style = """
         width: 60px;
         height: 200px;
         display: inline-block;
-        margin-right: -3px;
+        margin-right: -5px;
         z-index: 1;
         transition: transform 0.1s ease;
     }
