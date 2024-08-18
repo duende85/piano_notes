@@ -57,6 +57,10 @@ white_key_style = """
         align-items: center;
         margin: 0 2px;
         position: relative;
+        cursor: pointer;
+    }
+    .white-key:active {
+        transform: translateY(5px);
     }
     </style>
     """
@@ -75,7 +79,10 @@ black_key_style = """
         margin: 0 -20px;
         z-index: 2;
         position: relative;
-        top: 0;
+        cursor: pointer;
+    }
+    .black-key:active {
+        transform: translateY(5px);
     }
     </style>
     """
@@ -95,8 +102,8 @@ keys_layout = [
 st.title("Piano App")
 columns = st.columns(len(keys_layout))
 
+# Make keys clickable without extra buttons
 for i, (note, style) in enumerate(keys_layout):
     with columns[i]:
-        if st.button(note, key=note, help=f"Play {note}"):
+        if st.markdown(f'<div class="{style}" onclick="playNote_{note}()">{note}</div>', unsafe_allow_html=True):
             play_note(note)
-        st.markdown(f'<div class="{style}">{note}</div>', unsafe_allow_html=True)
