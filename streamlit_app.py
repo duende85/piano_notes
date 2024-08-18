@@ -48,7 +48,6 @@ def play_note_and_animate(note):
         pass
 
 # Styling keys to resemble piano keys
-# Styling keys to resemble piano keys
 white_key_style = """
     <style>
     .white-key {
@@ -67,6 +66,14 @@ white_key_style = """
         background-color: lightgray;
         transform: translateY(5px);
         border-top: none;  /* Completely remove the top border when pressed */
+    }
+    .white-key .label {
+        position: absolute;
+        bottom: 5px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 14px;
+        color: black;
     }
     </style>
     """
@@ -120,7 +127,8 @@ def generate_keys_layout(octave_range, active_octave=None):
             key_name = f'{note}{octave}'
             style = 'black-key' if '#' in note else 'white-key'
             is_active = octave == active_octave and key_name in NOTE_FILES
-            keys_layout.append((key_name, style, is_active))
+            label = 'C4' if key_name == 'C4' else ''
+            keys_layout.append((key_name, style, is_active, label))
     return keys_layout
 
 # Define the layout for the keys (Octaves 4, 5, 6)
@@ -130,13 +138,17 @@ keys_layout = generate_keys_layout(octave_range=range(4, 7), active_octave=6)
 st.title("Piano App")
 columns = st.columns(len(keys_layout))
 
-for i, (note, style, is_active) in enumerate(keys_layout):
+for i, (note, style, is_active, label) in enumerate(keys_layout):
     with columns[i]:
         if is_active:
-            if st.button("▶", key=note, help=f"Play {note}"):
+            if st.button("▶", key=note):
                 play_note_and_animate(note)
         else:
             st.button("▶", key=note, disabled=True)
         
-        # Display the key with the note ID
-        st.markdown(f'<div id="{note}" class="{style}"></div>', unsafe_allow_html=True)
+        # Display the key with the note ID and add label if it's C4
+        key_html = f'<div id="{note}" class="{style}">'
+        if label:
+            key_html += f'<div class="label">{label}</div>'
+        key_html += '</div>'
+        st.markdown(key_html, unsafe_allow_html=True)
