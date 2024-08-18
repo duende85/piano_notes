@@ -14,7 +14,7 @@ NOTE_FILES = {
     'D#6': 'notes/d_sharp_6.wav',
     'E6': 'notes/e6.wav',
     'F6': 'notes/f6.wav',
-    'F#6': 'notes/f_sharp_6.wav',
+    # 'F#6': 'notes/f_sharp_6.wav',
     'G6': 'notes/g6.wav',
     'G#6': 'notes/g_sharp_6.wav',
     'A6': 'notes/a6.wav',
@@ -47,7 +47,7 @@ def play_note_and_animate(note):
     else:
         pass
 
-# Styling keys to resemble piano keys
+# Styling keys to resemble piano keys with a 60% height ratio for black keys
 white_key_style = """
     <style>
     .white-key {
@@ -85,7 +85,7 @@ black_key_style = """
         color: white;
         border: 1px solid black;
         width: 40px;
-        height: 120px;
+        height: 120px;  /* 60% of the height of white keys */
         display: inline-block;
         position: absolute;
         margin-left: -20px;
