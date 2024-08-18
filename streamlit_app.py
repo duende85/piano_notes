@@ -1,9 +1,7 @@
 import streamlit as st
-import soundfile as sf
-from pathlib import Path
-import random
 import base64
-import streamlit.components.v1 as components
+import random
+from pathlib import Path
 
 st.set_page_config(layout="wide")
 
@@ -46,38 +44,39 @@ KEY_SCORES = {
     'B6': 'key_scores/b6.png',
 }
 
-# Initialize state if not already set
+# Initialize session state if not already set
 if 'current_key' not in st.session_state:
     st.session_state.current_key = random.choice(list(KEY_SCORES.keys()))
 
 if 'feedback_message' not in st.session_state:
     st.session_state.feedback_message = ""
 
+if 'audio_data' not in st.session_state:
+    st.session_state.audio_data = {}
+
 # Function to play the note
 def play_note_and_animate(note):
     file = NOTE_FILES.get(note)
     if file and Path(file).exists():
-        try:
+        if note not in st.session_state.audio_data:
             with open(file, 'rb') as audio_file:
                 audio_bytes = audio_file.read()
-                base64_audio = base64.b64encode(audio_bytes).decode()
+                st.session_state.audio_data[note] = base64.b64encode(audio_bytes).decode()
 
-                audio_html = f"""
-                <audio id="audio" autoplay>
-                <source src="data:audio/wav;base64,{base64_audio}" type="audio/wav">
-                Your browser does not support the audio element.
-                </audio>
-                <script>
-                var keyElement = document.getElementById('{note}');
-                keyElement.classList.add('pressed');
-                setTimeout(function() {{
-                    keyElement.classList.remove('pressed');
-                }}, 2000);
-                </script>
-                """
-                components.html(audio_html, height=0, width=0)
-        except Exception as e:
-            st.error(f"Error playing the note: {e}")
+        audio_html = f"""
+        <audio autoplay>
+        <source src="data:audio/wav;base64,{st.session_state.audio_data[note]}" type="audio/wav">
+        Your browser does not support the audio element.
+        </audio>
+        <script>
+        var keyElement = document.getElementById('{note}');
+        keyElement.classList.add('pressed');
+        setTimeout(function() {{
+            keyElement.classList.remove('pressed');
+        }}, 2000);
+        </script>
+        """
+        st.markdown(audio_html, unsafe_allow_html=True)
     else:
         st.warning(f"Note file for {note} not found.")
 
@@ -203,5 +202,5 @@ if st.button("Refresh Note Score"):
     st.session_state.current_key = random.choice(list(KEY_SCORES.keys()))
     st.session_state.feedback_message = ""
 
-#st.markdown("## Write anything you want below the piano here.")
-#st.write("This is where you can add any text, charts, or other content you want to display below the piano visualization.")
+st.markdown("## Write anything you want below the piano here.")
+st.write("This is where you can add any text, charts, or other content you want to display below the piano visualization.")
