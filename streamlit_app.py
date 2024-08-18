@@ -171,14 +171,4 @@ for i, (note, style, is_active, label) in enumerate(keys_layout):
 st.markdown("## Write anything you want below the piano here.")
 st.write("This is where you can add any text, charts, or other content you want to display below the piano visualization.")
 
-image_path = KEY_SCORES['F6']
-
-# Custom HTML to center the image
-centered_image_html = f"""
-<div style="display: flex; justify-content: center;">
-    <img src="{image_path}" alt="F6 Chord" style="width:auto;">
-</div>
-"""
-
-# Display the centered image in Streamlit
-st.markdown(centered_image_html, unsafe_allow_html=True)
+st.image(KEY_SCORES['F6'], caption="F6 Chord", use_column_width=False)
