@@ -1,7 +1,6 @@
 import streamlit as st
 import soundfile as sf
 from pathlib import Path
-import base64
 import random
 import streamlit.components.v1 as components
 
@@ -46,12 +45,10 @@ KEY_SCORES = {
     'B6': 'key_scores/b6.png',
 }
 
-# Preload images and their corresponding keys into a list
-preloaded_images = list(KEY_SCORES.items())
-
 # Initialize state if not already set
-if 'current_image' not in st.session_state:
-    st.session_state.current_image = random.choice(preloaded_images)
+if 'current_key' not in st.session_state:
+    st.session_state.current_key = random.choice(list(KEY_SCORES.keys()))
+
 if 'feedback_message' not in st.session_state:
     st.session_state.feedback_message = ""
 
@@ -61,11 +58,10 @@ def play_note_and_animate(note):
     if file and Path(file).exists():
         audio_file = open(file, 'rb')
         audio_bytes = audio_file.read()
-        base64_audio = base64.b64encode(audio_bytes).decode()
 
         audio_html = f"""
         <audio id="audio" autoplay>
-        <source src="data:audio/wav;base64,{base64_audio}" type="audio/wav">
+        <source src="data:audio/wav;base64,{base64.b64encode(audio_bytes).decode()}" type="audio/wav">
         Your browser does not support the audio element.
         </audio>
         <script>
@@ -78,7 +74,7 @@ def play_note_and_animate(note):
         """
         components.html(audio_html, height=0, width=0)
     else:
-        pass
+        st.warning(f"Note file for {note} not found.")
 
 # Styling for keys
 white_key_style = """
@@ -161,8 +157,9 @@ def generate_keys_layout(octave_range):
 # Define the layout for the keys (Octaves 4, 5, 6)
 keys_layout = generate_keys_layout(octave_range=range(4, 7))
 
-# Current key and image being displayed
-current_key, current_image = st.session_state.current_image
+# Current key being displayed
+current_key = st.session_state.current_key
+current_image_path = KEY_SCORES[current_key]
 
 # Function to check if the pressed key matches the displayed key
 def check_key_press(note):
@@ -175,7 +172,7 @@ def check_key_press(note):
 
 # Render the keys horizontally
 st.title("Score Sync App / Igor Wilk / August 2024")
-st.image(current_image, use_column_width=False)
+st.image(current_image_path, use_column_width=False)
 columns = st.columns(len(keys_layout))
 
 for i, (note, style, label) in enumerate(keys_layout):
@@ -198,7 +195,7 @@ if st.session_state.feedback_message:
 # Manual refresh button for the note score
 if st.button("Refresh Note Score"):
     if st.session_state.feedback_message == "Correct!":  # Only refresh after correct guess
-        st.session_state.current_image = random.choice(preloaded_images)
+        st.session_state.current_key = random.choice(list(KEY_SCORES.keys()))
         st.session_state.feedback_message = ""
 
 st.markdown("## Write anything you want below the piano here.")
