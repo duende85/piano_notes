@@ -85,10 +85,12 @@ white_key_style = """
         justify-content: center;
         align-items: center;
         margin: 0;
+        padding: 0;
         position: relative;
     }
     </style>
     """
+
 black_key_style = """
     <style>
     .black-key {
@@ -101,18 +103,23 @@ black_key_style = """
         justify-content: center;
         align-items: center;
         margin: 0 -19px;
+        padding: 0;
         z-index: 2;
         position: relative;
         top: 0;
     }
     </style>
     """
-# Adjust the button size with global CSS
+
+# Adjust the button size and remove space between columns
 button_style = """
     <style>
     .stButton button {
         font-size: 10px;
         padding: 3px 6px;
+    }
+    .stColumn > div {
+        padding: 0px;
     }
     </style>
     """
