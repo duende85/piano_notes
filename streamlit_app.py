@@ -65,6 +65,7 @@ white_key_style = """
     .white-key.pressed {
         background-color: lightgray;
         transform: translateY(5px);
+        border-top-color: lightgray;  /* Hide the top border when pressed */
     }
     </style>
     """
@@ -87,6 +88,7 @@ black_key_style = """
     .black-key.pressed {
         background-color: darkgray;
         transform: translateY(5px);
+        border-top-color: darkgray;  /* Hide the top border when pressed */
     }
     </style>
     """
