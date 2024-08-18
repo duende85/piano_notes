@@ -133,10 +133,15 @@ black_key_style = """
 st.markdown(white_key_style, unsafe_allow_html=True)
 st.markdown(black_key_style, unsafe_allow_html=True)
 
-# Display the current key's image lazily
+# Display the current key's image
 st.title("Score Sync App / Igor Wilk / August 2024")
 current_image_path = KEY_SCORES[st.session_state.current_key]
-st.image(current_image_path, use_column_width=False)  # Directly use the file path without preloading
+
+try:
+    st.image(current_image_path, use_column_width=False)
+except Exception as e:
+    st.error(f"Error displaying image: {e}")
+    st.write(f"Currently selected note: {st.session_state.current_key}")  # Fallback to text
 
 # Display the piano keys
 columns = st.columns(14)
