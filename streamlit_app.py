@@ -44,7 +44,7 @@ NOTE_FILES = {
     'B5': 'notes/b5.wav',
     'C6': 'notes/c6.wav',
     'C#6': 'notes/c_sharp_6.wav',
-    'D6': 'notes/d6.mp3',
+    'D6': 'notes/d6.wav',
     'D#6': 'notes/d_sharp_6.wav',
     'E6': 'notes/e6.wav',
     'F6': 'notes/f6.wav',
@@ -56,7 +56,27 @@ NOTE_FILES = {
     'B6': 'notes/b6.wav'
 }
 
+import streamlit.components.v1 as components
+
 def play_note(note):
+    file = NOTE_FILES.get(note)
+    if file and Path(file).exists():
+        audio_file = open(file, 'rb')
+        audio_bytes = audio_file.read()
+        st.write(f"Playing: {note}")
+        
+        # Use HTML to automatically play the audio
+        audio_html = f"""
+        <audio autoplay>
+        <source src="data:audio/wav;base64,{audio_bytes.decode('latin1')}" type="audio/wav">
+        Your browser does not support the audio element.
+        </audio>
+        """
+        components.html(audio_html, height=0, width=0)
+    else:
+        st.write(f"File not found for note: {note} - File path: {file}")
+
+def play_note2(note):
     file = NOTE_FILES.get(note)
     if file and Path(file).exists():
         st.audio(file, format='audio/mp3')
